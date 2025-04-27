@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Love - Dự Đoán Tình Yêu</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff61ab, #7e2e8d);
+            margin: 0;
+            padding: 20px;
+            color: #fff;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .input-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .person {
+            width: 48%;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .person {
+                width: 100%;
+            }
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff5e94, #ff2d55);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(255, 45, 85, 0.4);
+        }
+        button:hover {
+            background: linear-gradient(45deg, #ff2d55, #ff5e94);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 45, 85, 0.6);
+        }
+        .progress-container {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin: 30px 0;
+            height: 25px;
+            position: relative;
+            display: none;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #ff61ab, #7e2e8d, #ff61ab);
+            background-size: 200% 100%;
+            animation: gradient 2s linear infinite;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .result-section {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        .result-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .compatibility-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ff2d55;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .zodiac-info, .tarot-info, .methods-info {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .tarot-card {
+            width: 120px;
+            height: 200px;
+            background-color: #2b124c;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 10px;
+            color: gold;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .card-title {
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        .error {
+            color: #ff4757;
+            background-color: rgba(255, 71, 87, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        .heart-animation {
+            color: #ff2d55;
+            font-size: 24px;
+            position: absolute;
+            animation: float 3s ease-in infinite;
+            opacity: 0;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.2);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(var(--tx)) scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💖 Super Love - Dự Đoán Tình Yêu 💖</h1>
+        <p style="text-align: center; margin-bottom: 25px;">Dự đoán tình yêu chính xác đến 90% dựa trên tên, ngày tháng năm sinh và cung hoàng đạo</p>
+        
+        <div class="input-section">
+            <div class="person">
+                <h3>Người thứ nhất</h3>
+                <div class="error" id="error1"></div>
+                <label for="name1">Họ và tên:</label>
+                <input type="text" id="name1" placeholder="Ví dụ: Nguyễn Văn A">
+                
+                <label for="dob1">Ngày sinh:</label>
+                <input type="date" id="dob1">
+                
+                <div id="zodiac1" style="margin-top: 10px;"></div>
+            </div>
+            
+            <div class="person">
+                <h3>Người thứ hai</h3>
+                <div class="error" id="error2"></div>
+                <label for="name2">Họ và tên:</label>
+                <input type="text" id="name2" placeholder="Ví dụ: Nguyễn Thị B">
+                
+                <label for="dob2">Ngày sinh:</label>
+                <input type="date" id="dob2">
+                
+                <div id="zodiac2" style="margin-top: 10px;"></div>
+            </div>
+        </div>
+        
+        <button id="predict-btn">Dự Đoán Tình Yêu</button>
+        
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+            <div class="progress-text" id="progress-text">0%</div>
+        </div>
+        
+        <div class="result-section" id="result-section">
+            <div class="result-header">
+                <h2>Kết Quả Dự Đoán Tình Yêu</h2>
+                <p>Dựa trên tên và ngày sinh của hai người</p>
+            </div>
+            
+            <div class="compatibility-percentage">
+                <h3>Độ tương hợp tình yêu:</h3>
+                <div class="compatibility-score" id="compatibility-score">0%</div>
+            </div>
+            
+            <div class="zodiac-info">
+                <h3>Thông tin cung hoàng đạo</h3>
+                <div id="zodiac-compatibility"></div>
+            </div>
+            
+            <div class="tarot-info">
+                <h3>Bói Tarot Tình Yêu</h3>
+                <p>Ba lá bài Tarot cho mối quan hệ của hai bạn:</p>
+                <div class="card-container" id="tarot-cards">
+                    <!-- Tarot cards will be inserted here -->
+                </div>
+                <div id="tarot-reading"></div>
+            </div>
+            
+            <div class="methods-info">
+                <h3>Phương pháp dự đoán</h3>
+                <ul>
+                    <li>Phân tích cung hoàng đạo và tương hợp tử vi</li>
+                    <li>Phân tích số học tên và ngày sinh</li>
+                    <li>Bói Tarot tình yêu</li>
+                    <li>Tính toán các yếu tố âm dương ngũ hành</li>
+                    <li>Phân tích năng lượng tần số của tên</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Hoàn thiện mã JavaScript cho trang "Super Love - Dự Đoán Tình Yêu"
+document.addEventListener('DOMContentLoaded', function() {
+    const name1Input = document.getElementById('name1');
+    const name2Input = document.getElementById('name2');
+    const dob1Input = document.getElementById('dob1');
+    const dob2Input = document.getElementById('dob2');
+    const zodiac1Display = document.getElementById('zodiac1');
+    const zodiac2Display = document.getElementById('zodiac2');
+    const predictBtn = document.getElementById('predict-btn');
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const resultSection = document.getElementById('result-section');
+    const compatibilityScore = document.getElementById('compatibility-score');
+    const zodiacCompatibility = document.getElementById('zodiac-compatibility');
+    const tarotCards = document.getElementById('tarot-cards');
+    const tarotReading = document.getElementById('tarot-reading');
+    const error1 = document.getElementById('error1');
+    const error2 = document.getElementById('error2');
+    
+    // Zodiac sign determination
+    function getZodiacSign(day, month) {
+        if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) {
+            return { name: "Bạch Dương", vname: "Bạch Dương" };
+        } else if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) {
+            return { name: "Kim Ngưu", vname: "Kim Ngưu" };
+        } else if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) {
+            return { name: "Song Tử", vname: "Song Tử" };
+        } else if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) {
+            return { name: "Cự Giải", vname: "Cự Giải" };
+        } else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) {
+            return { name: "Sư Tử", vname: "Sư Tử" };
+        } else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) {
+            return { name: "Xử Nữ", vname: "Xử Nữ" };
+        } else if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) {
+            return { name: "Thiên Bình", vname: "Thiên Bình" };
+        } else if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) {
+            return { name: "Bò Cạp", vname: "Bò Cạp" };
+        } else if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) {
+            return { name: "Nhân Mã", vname: "Nhân Mã" };
+        } else if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) {
+            return { name: "Ma Kết", vname: "Ma Kết" };
+        } else if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) {
+            return { name: "Bảo Bình", vname: "Bảo Bình" };
+        } else {
+            return { name: "Song Ngư", vname: "Song Ngư" };
+        }
+    }
+    
+    // Update zodiac sign display when date changes
+    function updateZodiacDisplay() {
+        const dob1 = new Date(dob1Input.value);
+        const dob2 = new Date(dob2Input.value);
+        
+        if (!isNaN(dob1.getTime())) {
+            const month1 = dob1.getMonth() + 1;
+            const day1 = dob1.getDate();
+            const zodiac1 = getZodiacSign(day1, month1);
+            zodiac1Display.innerHTML = `<b>Cung hoàng đạo:</b> ${zodiac1.vname}`;
+        }
+        
+        if (!isNaN(dob2.getTime())) {
+            const month2 = dob2.getMonth() + 1;
+            const day2 = dob2.getDate();
+            const zodiac2 = getZodiacSign(day2, month2);
+            zodiac2Display.innerHTML = `<b>Cung hoàng đạo:</b> ${zodiac2.vname}`;
+        }
+    }
+    
+    dob1Input.addEventListener('change', updateZodiacDisplay);
+    dob2Input.addEventListener('change', updateZodiacDisplay);
+    
+    // Validate inputs
+    function validateInputs() {
+        let isValid = true;
+        
+        // Reset errors
+        error1.style.display = "none";
+        error2.style.display = "none";
+        
+        // Validate person 1
+        if (!name1Input.value.trim()) {
+            error1.textContent = "Vui lòng nhập tên";
+            error1.style.display = "block";
+            isValid = false;
+        }
+        
+        if (!dob1Input.value) {
+            error1.textContent = error1.textContent ? 
+                error1.textContent + " và ngày sinh" : 
+                "Vui lòng nhập ngày sinh";
+            error1.style.display = "block";
+            isValid = false;
+        }
+        
+        // Validate person 2
+        if (!name2Input.value.trim()) {
+            error2.textContent = "Vui lòng nhập tên";
+            error2.style.display = "block";
+            isValid = false;
+        }
+        
+        if (!dob2Input.value) {
+            error2.textContent = error2.textContent ? 
+                error2.textContent + " và ngày sinh" : 
+                "Vui lòng nhập ngày sinh";
+            error2.style.display = "block";
+            isValid = false;
+        }
+        
+        return isValid;
+    }
+    
+    // Generate a random number between min and max
+    function getRandomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    // Calculate zodiac compatibility
+    function calculateZodiacCompatibility(sign1, sign2) {
+        const compatibilityMatrix = {
+            "Bạch Dương": {
+                "Bạch Dương": 70,
+                "Kim Ngưu": 60,
+                "Song Tử": 70,
+                "Cự Giải": 65,
+                "Sư Tử": 90,
+                "Xử Nữ": 60,
+                "Thiên Bình": 75,
+                "Bò Cạp": 50,
+                "Nhân Mã": 85,
+                "Ma Kết": 60,
+                "Bảo Bình": 70,
+                "Song Ngư": 65
+            },
+            "Kim Ngưu": {
+                "Bạch Dương": 60,
+                "Kim Ngưu": 80,
+                "Song Tử": 55,
+                "Cự Giải": 85,
+                "Sư Tử": 65,
+                "Xử Nữ": 90,
+                "Thiên Bình": 80,
+                "Bò Cạp": 85,
+                "Nhân Mã": 45,
+                "Ma Kết": 90,
+                "Bảo Bình": 50,
+                "Song Ngư": 85
+            },
+            "Song Tử": {
+                "Bạch Dương": 70,
+                "Kim Ngưu": 55,
+                "Song Tử": 75,
+                "Cự Giải": 60,
+                "Sư Tử": 80,
+                "Xử Nữ": 75,
+                "Thiên Bình": 85,
+                "Bò Cạp": 55,
+                "Nhân Mã": 80,
+                "Ma Kết": 60,
+                "Bảo Bình": 90,
+                "Song Ngư": 70
+            },
+            "Cự Giải": {
+                "Bạch Dương": 65,
+                "Kim Ngưu": 85,
+                "Song Tử": 60,
+                "Cự Giải": 75,
+                "Sư Tử": 65,
+                "Xử Nữ": 75,
+                "Thiên Bình": 65,
+                "Bò Cạp": 90,
+                "Nhân Mã": 55,
+                "Ma Kết": 70,
+                "Bảo Bình": 55,
+                "Song Ngư": 90
+            },
+            "Sư Tử": {
+                "Bạch Dương": 90,
+                "Kim Ngưu": 65,
+                "Song Tử": 80,
+                "Cự Giải": 65,
+                "Sư Tử": 75,
+                "Xử Nữ": 60,
+                "Thiên Bình": 85,
+                "Bò Cạp": 60,
+                "Nhân Mã": 85,
+                "Ma Kết": 65,
+                "Bảo Bình": 75,
+                "Song Ngư": 60
+            },
+            "Xử Nữ": {
+                "Bạch Dương": 60,
+                "Kim Ngưu": 90,
+                "Song Tử": 75,
+                "Cự Giải": 75,
+                "Sư Tử": 60,
+                "Xử Nữ": 70,
+                "Thiên Bình": 65,
+                "Bò Cạp": 85,
+                "Nhân Mã": 60,
+                "Ma Kết": 85,
+                "Bảo Bình": 65,
+                "Song Ngư": 75
+            },
+            "Thiên Bình": {
+                "Bạch Dương": 75,
+                "Kim Ngưu": 80,
+                "Song Tử": 85,
+                "Cự Giải": 65,
+                "Sư Tử": 85,
+                "Xử Nữ": 65,
+                "Thiên Bình": 80,
+                "Bò Cạp": 70,
+                "Nhân Mã": 85,
+                "Ma Kết": 70,
+                "Bảo Bình": 80,
+                "Song Ngư": 70
+            },
+            "Bò Cạp": {
+                "Bạch Dương": 50,
+                "Kim Ngưu": 85,
+                "Song Tử": 55,
+                "Cự Giải": 90,
+                "Sư Tử": 60,
+                "Xử Nữ": 85,
+                "Thiên Bình": 70,
+                "Bò Cạp": 85,
+                "Nhân Mã": 65,
+                "Ma Kết": 85,
+                "Bảo Bình": 55,
+                "Song Ngư": 90
+            },
+            "Nhân Mã": {
+                "Bạch Dương": 85,
+                "Kim Ngưu": 45,
+                "Song Tử": 80,
+                "Cự Giải": 55,
+                "Sư Tử": 85,
+                "Xử Nữ": 60,
+                "Thiên Bình": 85,
+                "Bò Cạp": 65,
+                "Nhân Mã": 75,
+                "Ma Kết": 55,
+                "Bảo Bình": 85,
+                "Song Ngư": 60
+            },
+            "Ma Kết": {
+                "Bạch Dương": 60,
+                "Kim Ngưu": 90,
+                "Song Tử": 60,
+                "Cự Giải": 70,
+                "Sư Tử": 65,
+                "Xử Nữ": 85,
+                "Thiên Bình": 70,
+                "Bò Cạp": 85,
+                "Nhân Mã": 55,
+                "Ma Kết": 80,
+                "Bảo Bình": 65,
+                "Song Ngư": 75
+            },
+            "Bảo Bình": {
+                "Bạch Dương": 70,
+                "Kim Ngưu": 50,
+                "Song Tử": 90,
+                "Cự Giải": 55,
+                "Sư Tử": 75,
+                "Xử Nữ": 65,
+                "Thiên Bình": 80,
+                "Bò Cạp": 55,
+                "Nhân Mã": 85,
+                "Ma Kết": 65,
+                "Bảo Bình": 80,
+                "Song Ngư": 70
+            },
+            "Song Ngư": {
+                "Bạch Dương": 65,
+                "Kim Ngưu": 85,
+                "Song Tử": 70,
+                "Cự Giải": 90,
+                "Sư Tử": 60,
+                "Xử Nữ": 75,
+                "Thiên Bình": 70,
+                "Bò Cạp": 90,
+                "Nhân Mã": 60,
+                "Ma Kết": 75,
+                "Bảo Bình": 70,
+                "Song Ngư": 80
+            }
+        };
+        
+        return compatibilityMatrix[sign1][sign2] || 50;
+    }
+    
+    // Tarot cards
+    const tarotDecks = [
+        { name: "The Lovers", meaning: "Tình yêu, sự hòa hợp, mối quan hệ" },
+        { name: "The Sun", meaning: "Hạnh phúc, niềm vui, thành công" },
+        { name: "Two of Cups", meaning: "Tình yêu, quan hệ tốt đẹp, đối tác" },
+        { name: "Ten of Cups", meaning: "Hạnh phúc gia đình, niềm vui, tình yêu đích thực" },
+        { name: "The Star", meaning: "Hy vọng, niềm tin, nguồn cảm hứng" },
+        { name: "Queen of Cups", meaning: "Cảm xúc phong phú, trực giác, hỗ trợ" },
+        { name: "King of Cups", meaning: "Sự kiểm soát cảm xúc, cân bằng, trưởng thành" },
+        { name: "The Empress", meaning: "Phong phú, tình yêu, sự nuôi dưỡng" },
+        { name: "The Emperor", meaning: "Quyền lực, ổn định, bảo vệ" },
+        { name: "Ace of Cups", meaning: "Tình yêu mới, cảm xúc dạt dào, sự khởi đầu mới" },
+        { name: "Knight of Cups", meaning: "Sự lãng mạn, quyến rũ, cơ hội mới" },
+        { name: "Four of Wands", meaning: "Lễ kỷ niệm, hạnh phúc gia đình, mái ấm" },
+        { name: "Nine of Cups", meaning: "Mãn nguyện, hạnh phúc, ước mơ thành hiện thực" },
+        { name: "Ten of Pentacles", meaning: "Gia đình, thịnh vượng, kế thừa" },
+        { name: "The Wheel of Fortune", meaning: "Vận may, thay đổi, số phận" },
+        { name: "The World", meaning: "Hoàn thành, thành tựu, điểm đến" },
+        { name: "Strength", meaning: "Dũng cảm, kiên nhẫn, thuyết phục" },
+        { name: "Temperance", meaning: "Cân bằng, kiên nhẫn, hài hòa" }
+    ];
+    
+    // Create hearts animation
+    function createHearts() {
+        const container = document.querySelector('.container');
+        
+        for (let i = 0; i < 20; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.classList.add('heart-animation');
+                heart.style.left = `${getRandomNumber(10, 90)}%`;
+                heart.style.setProperty('--tx', `${getRandomNumber(-50, 50)}px`);
+                container.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 3000);
+            }, i * 300);
+        }
+    }
+    
+    // Main prediction function
+    predictBtn.addEventListener('click', function() {
+        if (!validateInputs()) {
+            return;
+        }
+        
+        // Show progress bar
+        progressContainer.style.display = "block";
+        resultSection.style.display = "none";
+        
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 1;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${progress}%`;
+            
+            if (progress >= 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    showResults();
+                }, 500);
+            }
+        }, 30);
+    });
+    
+    function showResults() {
+        progressContainer.style.display = "none";
+        resultSection.style.display = "block";
+        
+        // Get zodiac signs
+        const dob1 = new Date(dob1Input.value);
+        const dob2 = new Date(dob2Input.value);
+        const month1 = dob1.getMonth() + 1;
+        const day1 = dob1.getDate();
+        const month2 = dob2.getMonth() + 1;
+        const day2 = dob2.getDate();
+        
+        const zodiac1 = getZodiacSign(day1, month1);
+        const zodiac2 = getZodiacSign(day2, month2);
+        
+        // Calculate compatibility score
+        let zodiacScore = calculateZodiacCompatibility(zodiac1.name, zodiac2.name);
+        
+        // Get name compatibility (simplified numerology)
+        let nameScore = getRandomNumber(50, 95); // Simplified for demo
+        
+        // Calculate overall score with some variance
+        const variance = getRandomNumber(-5, 5);
+        let overallScore = Math.floor((zodiacScore * 0.5) + (nameScore * 0.5)) + variance;
+        
+        // Make sure score is within valid range
+        overallScore = Math.max(30, Math.min(99, overallScore));
+        
+        // Display compatibility score with animation
+        let currentScore = 0;
+        const scoreInterval = setInterval(() => {
+            currentScore += 1;
+            compatibilityScore.textContent = `${currentScore}%`;
+            
+            if (currentScore >= overallScore) {
+                clearInterval(scoreInterval);
+                createHearts();
+            }
+        }, 30);
+        
+        // Display zodiac compatibility info
+        zodiacCompatibility.innerHTML = `
+            <p><b>${name1Input.value}</b> (${zodiac1.vname}) và <b>${name2Input.value}</b> (${zodiac2.vname}) có độ tương hợp về cung hoàng đạo: ${zodiacScore}%</p>
+            ${getZodiacCompatibilityText(zodiacScore, zodiac1.vname, zodiac2.vname)}
+        `;
+        
+        // Display tarot cards
+        tarotCards.innerHTML = '';
+        const selectedCards = [];
+        
+        // Randomly select 3 unique tarot cards
+        while (selectedCards.length < 3) {
+            const randomIndex = getRandomNumber(0, tarotDecks.length - 1);
+            const card = tarotDecks[randomIndex];
+            
+            if (!selectedCards.includes(card)) {
+                selectedCards.push(card);
+            }
+        }
+        
+        // Add cards to display
+        selectedCards.forEach(card => {
+            const cardElement = document.createElement('div');
+            cardElement.classList.add('tarot-card');
+            cardElement.innerHTML = `
+                <div class="card-icon">🔮</div>
+                <div class="card-title">${card.name}</div>
+            `;
+            tarotCards.appendChild(cardElement);
+        });
+        
+        // Display tarot reading
+        tarotReading.innerHTML = `
+            <p><b>Ý nghĩa của các lá bài:</b></p>
+            <ul>
+                ${selectedCards.map(card => `<li><b>${card.name}:</b> ${card.meaning}</li>`).join('')}
+            </ul>
+            <p>${getTarotCompatibilityText(overallScore)}</p>
+        `;
+        
+        // Scroll to result section
+        resultSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Get zodiac compatibility text based on score
+    function getZodiacCompatibilityText(score, sign1, sign2) {
+        if (score >= 85) {
+            return `<p>${sign1} và ${sign2} có sự tương hợp tuyệt vời. Hai bạn có thể cùng nhau vượt qua mọi thử thách và xây dựng một mối quan hệ bền vững.</p>`;
+        } else if (score >= 70) {
+            return `<p>${sign1} và ${sign2} có sự tương hợp tốt. Hai bạn có nhiều điểm chung và có thể xây dựng mối quan hệ hạnh phúc.</p>`;
+        } else if (score >= 50) {
+            return `<p>${sign1} và ${sign2} có sự tương hợp trung bình. Mối quan hệ có thể gặp một số thử thách nhưng vẫn có tiềm năng phát triển nếu cả hai cùng nỗ lực.</p>`;
+        } else {
+            return `<p>${sign1} và ${sign2} có thể gặp nhiều thử thách trong mối quan hệ. Cần có sự thấu hiểu và nhẫn nại để vượt qua những khác biệt.</p>`;
+        }
+    }
+    
+    // Get tarot compatibility text based on score
+    function getTarotCompatibilityText(score) {
+        if (score >= 85) {
+            return "Các lá bài Tarot cho thấy đây là một mối quan hệ đầy triển vọng với nhiều tình yêu và sự hòa hợp. Hai bạn được định mệnh sắp đặt để bên nhau.";
+        } else if (score >= 70) {
+            return "Các lá bài Tarot cho thấy hai bạn có một kết nối đặc biệt. Mối quan hệ này có tiềm năng phát triển thành một tình yêu sâu đậm và bền vững.";
+        } else if (score >= 50) {
+            return "Các lá bài Tarot cho thấy mối quan hệ của hai bạn có cả cơ hội và thách thức. Sự thấu hiểu và kiên nhẫn sẽ giúp hai bạn vượt qua khó khăn.";
+        } else {
+            return "Các lá bài Tarot cho thấy mối quan hệ này sẽ đối mặt với nhiều thử thách. Hai bạn cần phải nỗ lực nhiều để vượt qua những khác biệt.";
+        }
+    }
+});
+    </script>
