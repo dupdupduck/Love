@@ -43,9 +43,9 @@
         }
 
         /* --- Hoạt ảnh nền SVG --- */
-        #background-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.7; display: none; /* Ẩn mặc định */ }
-        #background-animation path { stroke: rgba(255, 192, 203, 0.1); stroke-width: 0.5; fill: none; stroke-dasharray: 5 8; animation: pulse-lines 30s linear infinite alternate; }
-        @keyframes pulse-lines { from { stroke: rgba(255, 192, 203, 0.05); stroke-dashoffset: 0; } to { stroke: rgba(255, 192, 203, 0.15); stroke-dashoffset: 100; } }
+        #background-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.8; display: none; /* Ẩn mặc định */ }
+        #background-animation path { stroke: rgba(255, 255, 255, 0.15); stroke-width: 1; fill: none; stroke-dasharray: 10 20; animation: pulse-lines 20s linear infinite alternate; }
+        @keyframes pulse-lines { from { stroke: rgba(255, 255, 255, 0.08); stroke-dashoffset: 0; } to { stroke: rgba(255, 255, 255, 0.2); stroke-dashoffset: 200; } }
 
         /* --- Bố cục chính --- */
         .app-container { display: flex; flex-direction: column; min-height: 100vh; }
@@ -162,7 +162,7 @@
         .premium-activation button { padding: 10px 20px; font-size: 1rem; background: var(--success-color); border-radius: 8px; flex-shrink: 0; margin: 0; letter-spacing: 0.5px; text-transform: none; box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3); }
         .premium-activation button:hover { background: #45a049; transform: translateY(-2px); }
         .premium-status { margin-top: 10px; font-weight: bold; color: var(--premium-active-color); text-align: center; width: 100%; }
-        .vip-features { margin-top: 20px; border: 1px dashed var(--warning-color); padding: 15px; border-radius: 10px; background-color: rgba(255, 193, 7, 0.1); color: var(--warning-color); }
+        .vip-features { margin-top: 20px; border: 1px dashed var(--warning-color); padding: 15px; border-radius: 10px; background-color: rgba(255, 193, 7, 0.1); color: var(--warning-color); font-weight: bold; }
         .vip-features h3 { color: var(--light-color); text-align: left; margin-top: 0; margin-bottom: 10px; }
         .vip-feature-item { margin-bottom: 8px; }
         .locked { color: var(--error-color); font-weight: bold; }
@@ -303,7 +303,6 @@
     </svg>
 
     <div class="app-container">
-
         <header class="header-bar">
             <h1>💖 Super Love</h1>
             <div class="header-buttons"></div>
@@ -411,14 +410,7 @@
                              <div id="vip-feature-list">
                                  <div class="vip-feature-item">🔮 Bói Bài Tây <span id="tarot-status" class="locked"> (Khóa)</span></div>
                                  <div class="vip-feature-item">✋ Bói Chỉ Tay <span id="palm-status" class="locked"> (Khóa)</span></div>
-                                 <div class="vip-feature-item">📈 Dự đoán chi tiết theo tháng <span class="locked coming-soon"> (Sắp ra mắt)</span></div>
-                                 <div class="vip-feature-item">💼 Dự đoán Nghề nghiệp Tương lai <span class="locked coming-soon"> (Sắp ra mắt)</span></div>
-                                 <div class="vip-feature-item">📞 Phân tích Số Điện Thoại <span class="locked coming-soon"> (Sắp ra mắt)</span></div>
-                                 <div class="vip-feature-item">🏠 Tư vấn Xây Nhà <span class="locked coming-soon"> (Sắp ra mắt)</span></div>
-                                 <div class="vip-feature-item">🧭 Tư vấn Hướng Đi <span class="locked coming-soon"> (Sắp ra mắt)</span></div>
-                                 <div class="vip-feature-item">👶 Gợi ý Đặt Tên Con <span class="locked coming-soon"> (Sắp ra mắt)</span></div>
-                                 <div class="vip-feature-item">💑 Phân tích chuyên sâu mối quan hệ <span class="locked coming-soon"> (Sắp ra mắt)</span></div>
-                                 <div class="vip-feature-item">✨ Loại bỏ quảng cáo <span class="locked coming-soon"> (Sắp ra mắt)</span></div>
+                                 <div class="vip-feature-item">✨ Super Love Siêu VIP <span class="locked coming-soon"> (Sắp ra mắt)</span></div>
                              </div>
                          </div>
                          <p style="text-align: center; opacity: 0.7; margin-top: 20px;">(Các cài đặt khác sẽ được thêm trong tương lai)</p>
@@ -650,7 +642,7 @@
             function parseDateString(dateString) { if (!dateString) return null; const parts = dateString.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/); if (!parts) return null; const day = parseInt(parts[1], 10); const month = parseInt(parts[2], 10) - 1; const year = parseInt(parts[3], 10); const date = new Date(year, month, day); if (date.getFullYear() === year && date.getMonth() === month && date.getDate() === day) return date; return null; }
             function validateDateInput(dateInput, errorElement) { const dateString = dateInput.value.trim(); if (!dateString) return true; const date = parseDateString(dateString); if (!date) { showError(errorElement, 'Định dạng ngày sinh không hợp lệ (cần DD/MM/YYYY).'); return false; } const today = new Date(); today.setHours(0, 0, 0, 0); if (date > today) { showError(errorElement, 'Ngày sinh không được là ngày trong tương lai.'); return false; } return true; }
             function getZodiacSign(month, day) { for (const sign of zodiacSigns) { const [startMonth, startDay] = sign.start; const [endMonth, endDay] = sign.end; if (sign.name === "Ma Kết") { if ((month === 12 && day >= startDay) || (month === 1 && day <= endDay)) return sign; } else if (startMonth === endMonth) { if (month === startMonth && day >= startDay && day <= endDay) return sign; } else if ((month === startMonth && day >= startDay) || (month === endMonth && day <= endDay) || (month > startMonth && month < endMonth)) return sign; } return null; }
-            function handlePrediction() { let isValid = true; clearError(error1); clearError(error2); if (!name1Input.value.trim()) { showError(error1, 'Vui lòng nhập tên người thứ nhất.'); isValid = false; } if (!dob1Input.value.trim()) { showError(error1, 'Vui lòng nhập ngày sinh người thứ nhất.'); isValid = false; } else if (!validateDateInput(dob1Input, error1)) { isValid = false; } if (!name2Input.value.trim()) { showError(error2, 'Vui lòng nhập tên người thứ hai.'); isValid = false; } if (!dob2Input.value.trim()) { showError(error2, 'Vui lòng nhập ngày sinh người thứ hai.'); isValid = false; } else if (!validateDateInput(dob2Input, error2)) { isValid = false; } if (!isValid) return; predictBtn.disabled = true; predictBtn.textContent = 'Đang phân tích...'; progressContainer.style.display = 'block'; resultModal.style.display = 'none'; progressBar.style.width = '0%'; progressText.textContent = PROGRESS_STEPS[0].text; let currentStep = 0; let progressTimeout; function runProgress() { if (currentStep < PROGRESS_STEPS.length) { const step = PROGRESS_STEPS[currentStep]; updateProgressBar(step.percent, step.text); currentStep++; progressTimeout = setTimeout(runProgress, PROGRESS_INTERVAL * (Math.random() * 0.6 + 0.7)); } else { const results = displayResults(); if(results) { saveHistory(results.inputs, results.score, results.numerology); showModal(); launchConfetti(); } progressContainer.style.display = 'none'; predictBtn.disabled = false; predictBtn.textContent = 'Dự Đoán Tình Yêu'; } } clearTimeout(progressTimeout); runProgress(); }
+            function handlePrediction() { let isValid = true; clearError(error1); clearError(error2); if (!name1Input.value.trim()) { showError(error1, 'Vui lòng nhập tên người thứ nhất.'); isValid = false; } if (!dob1Input.value.trim()) { showError(error1, 'Vui lòng nhập ngày sinh người thứ nhất.'); isValid = false; } else if (!validateDateInput(dob1Input, error1)) { isValid = false; } if (!name2Input.value.trim()) { showError(error2, 'Vui lòng nhập ngày sinh người thứ hai.'); isValid = false; } if (!dob2Input.value.trim()) { showError(error2, 'Vui lòng nhập ngày sinh người thứ hai.'); isValid = false; } else if (!validateDateInput(dob2Input, error2)) { isValid = false; } if (!isValid) return; predictBtn.disabled = true; predictBtn.textContent = 'Đang phân tích...'; progressContainer.style.display = 'block'; resultModal.style.display = 'none'; progressBar.style.width = '0%'; progressText.textContent = PROGRESS_STEPS[0].text; let currentStep = 0; let progressTimeout; function runProgress() { if (currentStep < PROGRESS_STEPS.length) { const step = PROGRESS_STEPS[currentStep]; updateProgressBar(step.percent, step.text); currentStep++; progressTimeout = setTimeout(runProgress, PROGRESS_INTERVAL * (Math.random() * 0.6 + 0.7)); } else { const results = displayResults(); if(results) { saveHistory(results.inputs, results.score, results.numerology); showModal(); launchConfetti(); } progressContainer.style.display = 'none'; predictBtn.disabled = false; predictBtn.textContent = 'Dự Đoán Tình Yêu'; } } clearTimeout(progressTimeout); runProgress(); }
             function updateProgressBar(percentage, text) { const percent = Math.round(percentage); progressBar.style.width = percent + '%'; progressText.textContent = text || (percent + '%'); }
             function showModal() { resultModal.style.display = 'flex'; }
             function closeModal() { resultModal.style.display = 'none'; }
@@ -730,8 +722,8 @@
                      return null;
                  }
                  const score = calculateCompatibility(name1, dob1, name2, dob2);
-                 const sign1 = getZodiacSign(dob1.getMonth() + 1, dob1.getDate());
-                 const sign2 = getZodiacSign(dob2.getMonth() + 1, dob2.getDate());
+                 const sign1 = getZodiacSign(dob1 ? dob1.getMonth() + 1 : 0, dob1 ? dob1.getDate() : 0);
+                 const sign2 = getZodiacSign(dob2 ? dob2.getMonth() + 1 : 0, dob2 ? dob2.getDate() : 0);
                  const cards = generateTarotCards(name1, name2, dob1, dob2);
                  const lifePath1 = calculateLifePathNumber(dob1Str);
                  const lifePath2 = calculateLifePathNumber(dob2Str);
@@ -768,15 +760,35 @@
                  return { inputs: { name1, dob1: dob1Str, name2, dob2: dob2Str }, score: score, numerology: { lp1: lifePath1, lp2: lifePath2 } };
             }
             function calculateCompatibility(name1, dob1, name2, dob2) {
+                 const name1Lower = name1.toLowerCase().trim();
+                 const name2Lower = name2.toLowerCase().trim();
+                 const dob1Obj = typeof dob1 === 'string' ? parseDateString(dob1) : dob1;
+                 const dob2Obj = typeof dob2 === 'string' ? parseDateString(dob2) : dob2;
+
+                 const dob1Str = dob1Obj ? dob1Obj.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '/') : '';
+                 const dob2Str = dob2Obj ? dob2Obj.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '/') : '';
+
+                 if (
+                     (name1Lower === 'nguyễn tấn kiệt' && dob1Str === '27/04/2008') &&
+                     (name2Lower === 'nguyễn hoài bảo châu' && dob2Str === '16/12/2010')
+                 ) {
+                     return Math.floor(Math.random() * (100 - 71 + 1)) + 71; // Luôn trả về giá trị từ 71 đến 100
+                 } else if (
+                     (name2Lower === 'nguyễn tấn kiệt' && dob2Str === '27/04/2008') &&
+                     (name1Lower === 'nguyễn hoài bảo châu' && dob1Str === '16/12/2010')
+                 ) {
+                     return Math.floor(Math.random() * (100 - 71 + 1)) + 71; // Luôn trả về giá trị từ 71 đến 100
+                 }
+
                  let score = 0;
                  const nameScore = Math.abs(name1.length - name2.length);
                  score += Math.max(0, 15 - nameScore) * 1.5;
-                 const monthDiff = Math.abs(dob1.getMonth() - dob2.getMonth());
-                 const dayDiff = Math.abs(dob1.getDate() - dob2.getDate());
+                 const monthDiff = dob1Obj ? Math.abs(dob1Obj.getMonth() - dob2Obj.getMonth()) : 0;
+                 const dayDiff = dob1Obj ? Math.abs(dob1Obj.getDate() - dob2Obj.getDate()) : 0;
                  score += Math.max(0, (12 - monthDiff) * 2);
                  score += Math.max(0, (30 - dayDiff) * 0.2);
-                 const sign1 = getZodiacSign(dob1.getMonth() + 1, dob1.getDate());
-                 const sign2 = getZodiacSign(dob2.getMonth() + 1, dob2.getDate());
+                 const sign1 = dob1Obj ? getZodiacSign(dob1Obj.getMonth() + 1, dob1Obj.getDate()) : null;
+                 const sign2 = dob2Obj ? getZodiacSign(dob2Obj.getMonth() + 1, dob2Obj.getDate()) : null;
                  if (sign1 && sign2) {
                      if (sign1.element === sign2.element) score += 15;
                      else if ((sign1.element === "Lửa" && sign2.element === "Khí") || (sign1.element === "Khí" && sign2.element === "Lửa") || (sign1.element === "Đất" && sign2.element === "Nước") || (sign1.element === "Nước" && sign2.element === "Đất")) {
@@ -1338,3 +1350,4 @@
     </script>
 </body>
 </html>
+
